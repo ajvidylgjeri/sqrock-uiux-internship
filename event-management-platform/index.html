@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Eventa — Event Management Platform UI/UX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{--bg:#0d0b1a;--panel:#171331;--card:#1e1940;--line:#2d2758;--text:#f2f0fb;
+    --muted:#a39fc4;--accent:#a855f7;--accent2:#ec4899;--cyan:#22d3ee;--radius:18px;--maxw:1140px}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Sora',system-ui,sans-serif;background:
+    radial-gradient(900px 400px at 85% -10%,rgba(168,85,247,.25),transparent),var(--bg);
+    color:var(--text);line-height:1.6}
+  .container{width:min(var(--maxw),92%);margin-inline:auto}
+  a{color:inherit;text-decoration:none}
+  .btn{display:inline-flex;align-items:center;gap:.5rem;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;padding:.8rem 1.5rem;border-radius:12px;font-weight:600;border:0;cursor:pointer;font-family:inherit}
+  .btn--ghost{background:rgba(255,255,255,.08);border:1px solid var(--line)}
+  .tag{color:var(--cyan);font-weight:600;text-transform:uppercase;letter-spacing:.1em;font-size:.78rem}
+
+  nav{position:sticky;top:0;z-index:20;background:rgba(13,11,26,.8);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:68px}
+  .brand{font-weight:800;font-size:1.3rem}
+  .nav-links{display:flex;gap:1.6rem}.nav-links a{color:var(--muted);font-weight:500}.nav-links a:hover{color:var(--text)}
+
+  .hero{padding:4rem 0 2rem;text-align:center}
+  .hero h1{font-size:clamp(2.2rem,6vw,3.8rem);font-weight:800;line-height:1.05;max-width:16ch;margin:0 auto 1rem}
+  .hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--accent),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p{color:var(--muted);max-width:52ch;margin:0 auto 1.8rem;font-size:1.08rem}
+  .searchbar{display:flex;gap:.5rem;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:.5rem;max-width:620px;margin:0 auto;flex-wrap:wrap}
+  .searchbar input{flex:1;min-width:120px;background:transparent;border:0;color:var(--text);padding:.7rem .9rem;font-family:inherit;outline:none}
+  .cats{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin:1.6rem 0 0}
+  .cats span{background:var(--card);border:1px solid var(--line);padding:.45rem 1rem;border-radius:999px;font-size:.85rem;color:var(--muted)}
+  .cats span.on{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-color:transparent}
+
+  section{padding:3.5rem 0}
+  .shead{display:flex;justify-content:space-between;align-items:end;margin-bottom:1.6rem}
+  .shead h2{font-size:1.6rem}
+  .events{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1.3rem}
+  .ev{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;transition:transform .25s}
+  .ev:hover{transform:translateY(-5px)}
+  .ev .ban{height:130px;display:grid;place-items:center;font-size:2.6rem;position:relative}
+  .ev .cat{position:absolute;top:.6rem;right:.6rem;background:rgba(0,0,0,.45);font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:999px}
+  .ev .b{padding:1rem}
+  .ev h3{font-size:1.05rem}
+  .ev .meta{color:var(--muted);font-size:.82rem;margin:.3rem 0}
+  .ev .foot{display:flex;justify-content:space-between;align-items:center;margin-top:.6rem}
+  .ev .price{color:var(--cyan);font-weight:700}
+
+  /* detail preview + booking */
+  .detail{display:grid;grid-template-columns:1.3fr .7fr;gap:1.6rem;align-items:start}
+  .detail .poster{height:300px;border-radius:var(--radius);background:linear-gradient(135deg,#a855f7,#ec4899);display:grid;place-items:center;font-size:4rem}
+  .detail h2{font-size:1.8rem;margin:.6rem 0}
+  .detail .info{display:flex;gap:1.4rem;color:var(--muted);flex-wrap:wrap;margin-bottom:1rem;font-size:.9rem}
+  .book{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:1.4rem;position:sticky;top:84px}
+  .tier{display:flex;justify-content:space-between;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:.8rem 1rem;margin-bottom:.7rem}
+  .tier b{display:block}.tier span{color:var(--muted);font-size:.8rem}
+  .total{display:flex;justify-content:space-between;align-items:center;padding:.9rem 0;border-top:1px solid var(--line);margin-top:.4rem;font-weight:700}
+  .total b{color:var(--cyan);font-size:1.3rem}
+
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:1.4rem;text-align:center}
+  .step .n{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;margin:0 auto .8rem;font-weight:700}
+  .step h3{font-size:1.05rem;margin-bottom:.3rem}.step p{color:var(--muted);font-size:.88rem}
+
+  footer{padding:2rem 0;border-top:1px solid var(--line);color:var(--muted);text-align:center;font-size:.9rem}
+  @media(max-width:820px){.detail{grid-template-columns:1fr}.book{position:static}.nav-links{display:none}}
+</style>
+</head>
+<body>
+<nav><div class="container nav">
+  <div class="brand">◆ Eventa</div>
+  <div class="nav-links"><a href="#discover">Discover</a><a href="#detail">Event</a><a href="#how">How it works</a></div>
+  <a href="#" class="btn btn--ghost">Sign in</a>
+</div></nav>
+
+<header class="hero container">
+  <span class="tag">Event Management Platform</span>
+  <h1>Discover events you'll <em>never forget</em></h1>
+  <p>Browse concerts, workshops and festivals, book tickets in seconds, and manage everything in one place.</p>
+  <div class="searchbar">
+    <input placeholder="🔍 Search events, artists, venues" />
+    <input placeholder="📍 Location" />
+    <button class="btn">Search</button>
+  </div>
+  <div class="cats"><span class="on">All</span><span>Music</span><span>Workshops</span><span>Sports</span><span>Food</span><span>Film</span></div>
+</header>
+
+<section id="discover" class="container">
+  <div class="shead"><h2>Upcoming events</h2><a href="#" style="color:var(--cyan);font-size:.9rem">See all →</a></div>
+  <div class="events">
+    <div class="ev"><div class="ban" style="background:linear-gradient(135deg,#8b5cf6,#ec4899)">🎷<span class="cat">Music</span></div><div class="b"><h3>Sunset Rooftop Jazz</h3><p class="meta">📅 Sat 28 Nov · 📍 Sky Terrace</p><div class="foot"><span class="price">From $15</span><button class="btn" style="padding:.4rem .9rem;font-size:.85rem">Book</button></div></div></div>
+    <div class="ev"><div class="ban" style="background:linear-gradient(135deg,#2563eb,#22d3ee)">💻<span class="cat">Workshop</span></div><div class="b"><h3>Web Dev Bootcamp</h3><p class="meta">📅 Sun 6 Dec · 📍 Innovation Hub</p><div class="foot"><span class="price">From $10</span><button class="btn" style="padding:.4rem .9rem;font-size:.85rem">Book</button></div></div></div>
+    <div class="ev"><div class="ban" style="background:linear-gradient(135deg,#10b981,#06b6d4)">🏃<span class="cat">Sports</span></div><div class="b"><h3>City Marathon 2026</h3><p class="meta">📅 Sun 13 Dec · 📍 Main Blvd</p><div class="foot"><span class="price">From $12</span><button class="btn" style="padding:.4rem .9rem;font-size:.85rem">Book</button></div></div></div>
+    <div class="ev"><div class="ban" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">🍷<span class="cat">Food</span></div><div class="b"><h3>Food &amp; Wine Festival</h3><p class="meta">📅 Sat 19 Dec · 📍 Riverside Park</p><div class="foot"><span class="price">From $18</span><button class="btn" style="padding:.4rem .9rem;font-size:.85rem">Book</button></div></div></div>
+  </div>
+</section>
+
+<section id="detail" class="container">
+  <span class="tag">Event detail &amp; booking</span>
+  <div class="detail" style="margin-top:1rem">
+    <div>
+      <div class="poster">🎷</div>
+      <h2>Sunset Rooftop Jazz</h2>
+      <div class="info"><span>📅 Sat 28 Nov 2026</span><span>🕖 19:00</span><span>📍 Sky Terrace, Tirana</span></div>
+      <p style="color:var(--muted)">An evening of smooth live jazz with city views, craft cocktails and a warm crowd. Doors open at 18:30 — arrive early for the best seats.</p>
+    </div>
+    <div class="book">
+      <h3 style="margin-bottom:1rem">Select tickets</h3>
+      <div class="tier"><div><b>General</b><span>Standing</span></div><div>$15 &nbsp; <b style="color:var(--cyan)">1</b></div></div>
+      <div class="tier"><div><b>VIP</b><span>Front row + drink</span></div><div>$35 &nbsp; <b style="color:var(--muted)">0</b></div></div>
+      <div class="total"><span>Total</span><b>$15</b></div>
+      <button class="btn" style="width:100%;justify-content:center;margin-top:.6rem">Checkout</button>
+    </div>
+  </div>
+</section>
+
+<section id="how" class="container">
+  <div class="shead"><h2>How it works</h2></div>
+  <div class="steps">
+    <div class="step"><div class="n">1</div><h3>Discover</h3><p>Browse and filter events by category, date and location.</p></div>
+    <div class="step"><div class="n">2</div><h3>Select</h3><p>Pick your ticket tier and quantity with a live total.</p></div>
+    <div class="step"><div class="n">3</div><h3>Book</h3><p>Secure checkout and instant confirmation.</p></div>
+    <div class="step"><div class="n">4</div><h3>Manage</h3><p>Access your tickets and event reminders anytime.</p></div>
+  </div>
+</section>
+
+<footer>Eventa event platform UI/UX by Ajvi Dylgjeri · Sqrock IT Internship</footer>
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Wavelength — Music App UI/UX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0a0a12;--panel:#12121f;--screen:#0e0e1a;--card:#1b1b2e;--line:#272740;
+    --text:#f3f3fb;--muted:#9a9ab5;--accent:#1ed760;--accent2:#8b5cf6;--radius:34px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:
+    radial-gradient(1000px 500px at 80% -10%,rgba(139,92,246,.18),transparent),var(--bg);
+    color:var(--text);padding:3rem 1.5rem 5rem}
+  .wrap{max-width:1300px;margin:0 auto}
+  .intro{text-align:center;margin-bottom:3rem}
+  .intro h1{font-size:clamp(2rem,5vw,3rem);font-weight:800}
+  .intro p{color:var(--muted);margin-top:.6rem;max-width:60ch;margin-inline:auto}
+  .intro .meta{margin-top:1rem;display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap}
+  .intro .meta span{background:var(--card);border:1px solid var(--line);padding:.35rem .9rem;border-radius:999px;font-size:.8rem;color:var(--muted)}
+  .screens{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:2.5rem;justify-items:center}
+  .screen-wrap{display:flex;flex-direction:column;align-items:center;gap:.9rem}
+  .label{color:var(--muted);font-size:.85rem;font-weight:600}
+  .label b{color:var(--text)}
+  /* phone frame */
+  .phone{width:270px;height:560px;background:#000;border-radius:var(--radius);padding:10px;
+    box-shadow:0 30px 70px -25px rgba(0,0,0,.8),0 0 0 2px #1a1a2e;position:relative}
+  .phone::before{content:"";position:absolute;top:16px;left:50%;transform:translateX(-50%);
+    width:90px;height:22px;background:#000;border-radius:0 0 14px 14px;z-index:5}
+  .scr{width:100%;height:100%;background:var(--screen);border-radius:26px;overflow:hidden;position:relative;display:flex;flex-direction:column}
+  .statusbar{height:34px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;font-size:.7rem;color:var(--muted);flex-shrink:0}
+  .body{flex:1;overflow:hidden;padding:0 16px}
+  .tabbar{height:58px;background:#0b0b16;border-top:1px solid var(--line);display:flex;justify-content:space-around;align-items:center;flex-shrink:0;font-size:1.1rem}
+  .tabbar .on{color:var(--accent)}
+  .tabbar span{color:var(--muted)}
+
+  h3.s{font-size:1.1rem;margin:.4rem 0 1rem}
+  .muted{color:var(--muted)}
+  .pill{background:var(--accent);color:#06240f;border:0;border-radius:999px;padding:.7rem 1.4rem;font-weight:700;font-family:inherit;font-size:.9rem;width:100%;margin-top:.6rem}
+  .pill--ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
+  .field{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:.7rem .9rem;font-size:.8rem;color:var(--muted);margin-bottom:.6rem}
+  .row{display:flex;gap:.6rem}
+  .cards-row{display:flex;gap:.7rem;overflow:hidden;margin-bottom:1rem}
+  .mini{min-width:92px}
+  .art{width:92px;height:92px;border-radius:12px;background:linear-gradient(135deg,var(--accent2),#ec4899)}
+  .art.b{background:linear-gradient(135deg,#1ed760,#0ea5e9)}
+  .art.c{background:linear-gradient(135deg,#f59e0b,#ef4444)}
+  .art.d{background:linear-gradient(135deg,#6366f1,#22d3ee)}
+  .art.sm{width:46px;height:46px;border-radius:10px}
+  .mini p{font-size:.72rem;margin-top:.35rem}
+  .mini span{font-size:.66rem;color:var(--muted)}
+  .track{display:flex;align-items:center;gap:.7rem;margin-bottom:.8rem}
+  .track p{font-size:.8rem}.track span{font-size:.68rem;color:var(--muted)}
+  .section-t{font-size:.95rem;font-weight:700;margin:.4rem 0 .7rem}
+  /* splash */
+  .splash{background:linear-gradient(160deg,var(--accent2),#0a0a12 70%);height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;text-align:center;padding:2rem}
+  .logo-badge{width:84px;height:84px;border-radius:24px;background:var(--accent);display:grid;place-items:center;font-size:2.4rem}
+  /* player */
+  .player{display:flex;flex-direction:column;align-items:center;gap:1rem;padding-top:1rem}
+  .player .bigart{width:200px;height:200px;border-radius:20px;background:linear-gradient(135deg,var(--accent2),#ec4899);box-shadow:0 20px 50px -15px rgba(139,92,246,.6)}
+  .progress{width:100%;height:4px;background:var(--line);border-radius:3px;position:relative}
+  .progress i{position:absolute;left:0;top:0;height:100%;width:42%;background:var(--accent);border-radius:3px}
+  .progress::after{content:"";position:absolute;left:42%;top:50%;transform:translate(-50%,-50%);width:11px;height:11px;border-radius:50%;background:#fff}
+  .controls{display:flex;align-items:center;gap:1.4rem;font-size:1.3rem;color:var(--text)}
+  .controls .play{width:56px;height:56px;border-radius:50%;background:var(--accent);color:#06240f;display:grid;place-items:center;font-size:1.3rem}
+  .chips{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+  .chips span{background:var(--card);border:1px solid var(--line);padding:.35rem .8rem;border-radius:999px;font-size:.72rem;color:var(--muted)}
+  .search-box{background:var(--card);border-radius:12px;padding:.7rem .9rem;font-size:.8rem;color:var(--muted);margin-bottom:1rem;display:flex;gap:.5rem}
+  .genre-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+  .genre{height:70px;border-radius:12px;padding:.6rem;font-size:.78rem;font-weight:700;display:flex;align-items:flex-end}
+  footer{text-align:center;color:var(--muted);margin-top:4rem;font-size:.9rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="intro">
+    <h1>🎧 Wavelength — Music Streaming App</h1>
+    <p>A UI/UX concept for a modern music streaming experience. Six core screens with a consistent dark theme, clear hierarchy and a mobile-first layout.</p>
+    <div class="meta"><span>UI/UX Design</span><span>6 screens</span><span>Mobile-first</span><span>Design system: dark + mint accent</span></div>
+  </div>
+
+  <div class="screens">
+
+    <!-- 1 Splash -->
+    <div class="screen-wrap">
+      <div class="phone"><div class="scr">
+        <div class="splash">
+          <div class="logo-badge">🎵</div>
+          <h2>Wavelength</h2>
+          <p class="muted">Millions of songs. Free on your phone.</p>
+          <button class="pill">Get started</button>
+          <button class="pill pill--ghost">I already have an account</button>
+        </div>
+      </div></div>
+      <div class="label"><b>1.</b> Splash / Welcome</div>
+    </div>
+
+    <!-- 2 Auth -->
+    <div class="screen-wrap">
+      <div class="phone"><div class="scr">
+        <div class="statusbar"><span>9:41</span><span>●●● 100%</span></div>
+        <div class="body">
+          <h3 class="s">Log in</h3>
+          <div class="field">📧 Email address</div>
+          <div class="field">🔒 Password</div>
+          <button class="pill">Continue</button>
+          <p class="muted" style="text-align:center;margin:1rem 0 .8rem;font-size:.75rem">or continue with</p>
+          <div class="row"><button class="pill pill--ghost">Google</button><button class="pill pill--ghost">Apple</button></div>
+          <p class="muted" style="text-align:center;margin-top:1.2rem;font-size:.75rem">Forgot password?</p>
+        </div>
+      </div></div>
+      <div class="label"><b>2.</b> Login / Sign-up</div>
+    </div>
+
+    <!-- 3 Home -->
+    <div class="screen-wrap">
+      <div class="phone"><div class="scr">
+        <div class="statusbar"><span>9:41</span><span>●●● 100%</span></div>
+        <div class="body">
+          <h3 class="s">Good evening 👋</h3>
+          <div class="section-t">Featured playlists</div>
+          <div class="cards-row">
+            <div class="mini"><div class="art"></div><p>Chill Vibes</p><span>42 songs</span></div>
+            <div class="mini"><div class="art b"></div><p>Focus Flow</p><span>30 songs</span></div>
+            <div class="mini"><div class="art c"></div><p>Top Hits</p><span>50 songs</span></div>
+          </div>
+          <div class="section-t">Recently played</div>
+          <div class="track"><div class="art sm"></div><div><p>Midnight City</p><span>Neon Dreams</span></div></div>
+          <div class="track"><div class="art sm b"></div><div><p>Golden Hour</p><span>Sunset Trio</span></div></div>
+          <div class="track"><div class="art sm c"></div><div><p>Paper Planes</p><span>The Wanderers</span></div></div>
+        </div>
+        <div class="tabbar"><span class="on">🏠</span><span>🔍</span><span>📚</span><span>👤</span></div>
+      </div></div>
+      <div class="label"><b>3.</b> Home</div>
+    </div>
+
+    <!-- 4 Player -->
+    <div class="screen-wrap">
+      <div class="phone"><div class="scr">
+        <div class="statusbar"><span>9:41</span><span>●●● 100%</span></div>
+        <div class="body">
+          <p class="muted" style="text-align:center;font-size:.72rem;margin:.3rem 0">NOW PLAYING</p>
+          <div class="player">
+            <div class="bigart"></div>
+            <div style="text-align:center"><h3 class="s" style="margin:.3rem 0">Midnight City</h3><p class="muted" style="font-size:.78rem">Neon Dreams</p></div>
+            <div class="progress"><i></i></div>
+            <div class="row" style="width:100%;justify-content:space-between"><span class="muted" style="font-size:.68rem">1:42</span><span class="muted" style="font-size:.68rem">3:58</span></div>
+            <div class="controls"><span>🔀</span><span>⏮</span><span class="play">▶</span><span>⏭</span><span>🔁</span></div>
+            <div class="row" style="width:100%;justify-content:space-between;margin-top:.4rem"><span>❤️</span><span class="muted">🔊 ▁▃▅▇</span><span>↗</span></div>
+          </div>
+        </div>
+      </div></div>
+      <div class="label"><b>4.</b> Music Player</div>
+    </div>
+
+    <!-- 5 Search -->
+    <div class="screen-wrap">
+      <div class="phone"><div class="scr">
+        <div class="statusbar"><span>9:41</span><span>●●● 100%</span></div>
+        <div class="body">
+          <h3 class="s">Search</h3>
+          <div class="search-box">🔍 Artists, songs or podcasts</div>
+          <div class="section-t">Browse genres</div>
+          <div class="genre-grid">
+            <div class="genre" style="background:linear-gradient(135deg,#8b5cf6,#ec4899)">Pop</div>
+            <div class="genre" style="background:linear-gradient(135deg,#1ed760,#0ea5e9)">Hip-Hop</div>
+            <div class="genre" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">Rock</div>
+            <div class="genre" style="background:linear-gradient(135deg,#6366f1,#22d3ee)">Chill</div>
+            <div class="genre" style="background:linear-gradient(135deg,#ec4899,#f59e0b)">Dance</div>
+            <div class="genre" style="background:linear-gradient(135deg,#14b8a6,#6366f1)">Jazz</div>
+          </div>
+        </div>
+        <div class="tabbar"><span>🏠</span><span class="on">🔍</span><span>📚</span><span>👤</span></div>
+      </div></div>
+      <div class="label"><b>5.</b> Search</div>
+    </div>
+
+    <!-- 6 Library -->
+    <div class="screen-wrap">
+      <div class="phone"><div class="scr">
+        <div class="statusbar"><span>9:41</span><span>●●● 100%</span></div>
+        <div class="body">
+          <h3 class="s">Your Library</h3>
+          <div class="chips"><span>Playlists</span><span>Artists</span><span>Albums</span><span>Downloaded</span></div>
+          <div class="track"><div class="art sm"></div><div><p>Liked Songs</p><span>128 songs</span></div></div>
+          <div class="track"><div class="art sm b"></div><div><p>Chill Vibes</p><span>Playlist · 42 songs</span></div></div>
+          <div class="track"><div class="art sm c"></div><div><p>Workout Mix</p><span>Playlist · 25 songs</span></div></div>
+          <div class="track"><div class="art sm d"></div><div><p>Neon Dreams</p><span>Artist</span></div></div>
+          <div class="track"><div class="art sm"></div><div><p>Road Trip</p><span>Playlist · 60 songs</span></div></div>
+        </div>
+        <div class="tabbar"><span>🏠</span><span>🔍</span><span class="on">📚</span><span>👤</span></div>
+      </div></div>
+      <div class="label"><b>6.</b> Library</div>
+    </div>
+
+  </div>
+
+  <footer>Wavelength music app UI/UX by Ajvi Dylgjeri · Sqrock IT Internship · 6-screen concept</footer>
+</div>
+</body>
+</html>
