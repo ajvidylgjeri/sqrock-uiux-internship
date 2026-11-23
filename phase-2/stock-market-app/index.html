@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lumen Invest · Stock Market App (UI/UX prototype)</title>
+<style>
+:root{--font:Inter,"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+[data-theme=light]{--bg:#EEF2F7;--screen:#F7F9FC;--card:#FFFFFF;--line:#E3E9F2;--text:#0E1A2B;--muted:#5E6C84;--brand:#0B7A5A;--brand2:#12B886;--up:#0B7A5A;--down:#C62F3E;--chip:#EAF0F7}
+[data-theme=dark]{--bg:#05080D;--screen:#0B1119;--card:#131C28;--line:#223043;--text:#EAF1FA;--muted:#92A2BA;--brand:#2DD4A0;--brand2:#12B886;--up:#2DD4A0;--down:#FF6B7A;--chip:#1A2636}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+body{font-family:var(--font);background:var(--bg);color:var(--text);display:grid;place-items:center;min-height:100vh;padding:16px}
+button{font:inherit;cursor:pointer;color:inherit}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.phone{width:390px;max-width:100%;height:844px;max-height:calc(100vh - 32px);background:var(--screen);border-radius:36px;border:1px solid var(--line);box-shadow:0 30px 80px rgba(10,30,60,.25);display:flex;flex-direction:column;overflow:hidden;position:relative}
+.scroll{flex:1;overflow-y:auto;padding:0 18px 24px}
+.scroll::-webkit-scrollbar{display:none}
+.status{display:flex;justify-content:space-between;padding:14px 26px 6px;font-size:13px;font-weight:600}
+.head{display:flex;align-items:center;justify-content:space-between;padding:10px 18px}
+.head h1{font-size:22px;font-weight:700}
+.back{border:0;background:var(--chip);width:38px;height:38px;border-radius:50%;font-size:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px}
+.muted{color:var(--muted)}.up{color:var(--up)}.down{color:var(--down)}
+.row{display:flex;align-items:center;gap:12px}.spread{justify-content:space-between}
+.logo{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;color:#fff;font-weight:700;font-size:15px;flex:0 0 auto}
+.stock{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);cursor:pointer;width:100%;background:none;border-left:0;border-right:0;border-top:0;text-align:left}
+.stock:last-child{border-bottom:0}
+.stock .n{flex:1;min-width:0}.stock b{display:block}.stock small{color:var(--muted)}
+.stock .p{text-align:right}
+.badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:12px;font-weight:700;background:color-mix(in srgb,currentColor 13%,transparent)}
+h2.sec{font-size:17px;margin:22px 0 10px;display:flex;justify-content:space-between;align-items:baseline}
+h2.sec a{font-size:13px;color:var(--brand);font-weight:600;cursor:pointer}
+.nav{display:flex;border-top:1px solid var(--line);background:var(--card);padding:6px 6px 14px}
+.nav button{flex:1;border:0;background:none;padding:8px 0;display:grid;gap:2px;justify-items:center;font-size:11px;color:var(--muted);font-weight:600}
+.nav button .i{font-size:20px}.nav button.on{color:var(--brand)}
+.btn{border:0;border-radius:14px;padding:14px;font-weight:700;font-size:15px;width:100%}
+.btn.p{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff}
+.btn.s{background:var(--chip)}
+.btn.sell{background:var(--down);color:#fff}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0}.chips::-webkit-scrollbar{display:none}
+.chip{border:0;background:var(--chip);color:var(--muted);padding:8px 14px;border-radius:99px;font-weight:600;font-size:13px;white-space:nowrap}
+.chip.on{background:var(--brand);color:#fff}
+input.f{width:100%;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:14px;padding:14px;font:inherit}
+label.l{display:block;font-size:12px;font-weight:600;color:var(--muted);margin:14px 0 6px}
+.search{display:flex;gap:8px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0 12px}
+.search input{border:0;background:none;color:var(--text);font:inherit;padding:12px 0;width:100%;outline:none}
+.splash{background:radial-gradient(500px 400px at 80% 0,rgba(18,184,136,.45),transparent),radial-gradient(500px 500px at 0 100%,rgba(11,122,90,.55),transparent),#06261F;color:#fff;justify-content:space-between;padding:60px 28px 40px}
+.splash h1{font-size:38px;line-height:1.1;margin:18px 0 12px}
+.switch{width:46px;height:26px;border-radius:99px;background:var(--line);border:0;position:relative}
+.switch:after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}
+.switch.on{background:var(--brand)}.switch.on:after{left:23px}
+.set{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}.set:last-child{border:0}
+.sheet{position:absolute;inset:auto 0 0 0;background:var(--card);border-radius:26px 26px 0 0;border:1px solid var(--line);padding:20px;box-shadow:0 -20px 50px rgba(0,0,0,.25);z-index:10}
+.scrim{position:absolute;inset:0;background:rgba(0,0,0,.4);z-index:9}
+.toast{position:absolute;bottom:90px;left:50%;transform:translateX(-50%);background:var(--text);color:var(--screen);padding:10px 16px;border-radius:12px;font-size:13px;font-weight:600;z-index:20;white-space:nowrap}
+.news{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}.news:last-child{border:0}
+.thumb{width:70px;height:70px;border-radius:14px;flex:0 0 auto;display:grid;place-items:center;font-size:26px}
+.ds-sw{height:56px;border-radius:12px;display:flex;align-items:flex-end;padding:6px 8px;font-size:11px;font-weight:700;color:#fff;border:1px solid var(--line)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{padding:10px 0;border-bottom:1px solid var(--line)}.stat small{display:block;color:var(--muted)}
+@media (max-width:420px){body{padding:0}.phone{border-radius:0;height:100vh;max-height:none;border:0}}
+</style>
+</head>
+<body>
+<div class="phone" id="phone"></div>
+<script>
+let seed=21;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+const STOCKS=[
+ {s:'NOVA',n:'Novaterra Energy',c:'#0B7A5A',p:184.32,ch:2.14,cap:'412B',vol:'18.2M',sector:'Energy',about:'Fictional renewable-energy producer used for this design concept.'},
+ {s:'ARCO',n:'Arcos Robotics',c:'#4F46E5',p:96.45,ch:-1.32,cap:'88B',vol:'9.7M',sector:'Technology',about:'Fictional industrial robotics and automation company.'},
+ {s:'BLUM',n:'Bluma Health',c:'#0EA5E9',p:312.8,ch:0.87,cap:'250B',vol:'4.1M',sector:'Healthcare',about:'Fictional diagnostics and digital-health provider.'},
+ {s:'KITE',n:'Kite Mobility',c:'#F59E0B',p:41.12,ch:5.63,cap:'31B',vol:'27.5M',sector:'Automotive',about:'Fictional electric micro-mobility manufacturer.'},
+ {s:'ORBT',n:'Orbit Telecom',c:'#8B5CF6',p:128.9,ch:-3.4,cap:'142B',vol:'6.3M',sector:'Telecom',about:'Fictional satellite and broadband operator.'},
+ {s:'FERN',n:'Fernway Foods',c:'#16A34A',p:58.07,ch:0.25,cap:'46B',vol:'3.2M',sector:'Consumer',about:'Fictional plant-based food producer.'},
+ {s:'ZENO',n:'Zenobank Group',c:'#DC2626',p:73.6,ch:-0.78,cap:'120B',vol:'11.4M',sector:'Finance',about:'Fictional retail and investment bank.'},
+ {s:'PIXL',n:'Pixelforge Studios',c:'#EC4899',p:215.3,ch:3.12,cap:'175B',vol:'14.9M',sector:'Media',about:'Fictional game and animation studio.'}];
+const NEWS=[['Markets','Indexes edge higher as energy shares lead the rally','2h ago','📈'],['Company','Kite Mobility posts record quarterly deliveries','3h ago','🚲'],['Economy','Central bank signals patience on interest rates','5h ago','🏦'],['Company','Bluma Health expands diagnostics network to 9 countries','7h ago','🧪'],['Markets','Telecom stocks slip after spectrum auction results','9h ago','📡'],['Trending','Beginner guide: how to read a candlestick chart','1d ago','🎓']];
+const HOLD=[['NOVA',12,162.5],['BLUM',4,290],['PIXL',6,188.2],['KITE',40,33.4],['ZENO',15,76.8]];
+const TX=[['Buy','NOVA',4,'Nov 20'],['Sell','ORBT',10,'Nov 18'],['Buy','KITE',20,'Nov 14'],['Buy','PIXL',2,'Nov 09']];
+const S={r:location.hash.slice(2)||'splash',watch:['NOVA','KITE','BLUM','PIXL'],range:'1M',theme:'light',sheet:null,qty:1,toast:'',cat:'All',wq:'',push:true,price:true,news:false};
+const $=s=>STOCKS.find(x=>x.s===s);
+const money=v=>'$'+v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const pc=v=>(v>=0?'+':'')+v.toFixed(2)+'%';
+const cls=v=>v>=0?'up':'down';
+function series(sym,range){seed=sym.charCodeAt(0)*31+sym.charCodeAt(1)+range.length*7;const n={'1D':48,'1W':42,'1M':60,'1Y':72}[range];const st=$(sym);let v=st.p*(1-(st.ch>0?.08:-.05)*(range==='1D'?.2:range==='1W'?.5:range==='1M'?1:3));const out=[];for(let i=0;i<n;i++){v+= (st.p-v)/(n-i)*1.1+(rnd()-.5)*st.p*.012;out.push(v)}out[n-1]=st.p;return out}
+function chart(vals,w=354,h=170){const col=vals.at(-1)>=vals[0]?'var(--up)':'var(--down)';const mn=Math.min(...vals),mx=Math.max(...vals);const pts=vals.map((v,i)=>[i*(w/(vals.length-1)),h-10-(v-mn)/(mx-mn||1)*(h-24)]);const d=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');return `<svg viewBox="0 0 ${w} ${h}" width="100%" role="img" aria-label="Price chart"><defs><linearGradient id="g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="${col}" stop-opacity=".25"/><stop offset="1" stop-color="${col}" stop-opacity="0"/></linearGradient></defs><path d="${d} L${w} ${h} L0 ${h}Z" fill="url(#g)"/><path d="${d}" fill="none" stroke="${col}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><circle cx="${pts.at(-1)[0]-3}" cy="${pts.at(-1)[1]}" r="4.5" fill="${col}"/></svg>`}
+function donut(parts,size=130){const t=parts.reduce((a,p)=>a+p[1],0);let a0=-Math.PI/2;const R=size/2-10,c=size/2;return `<svg viewBox="0 0 ${size} ${size}" width="${size}" role="img" aria-label="Asset allocation">${parts.map(p=>{const a1=a0+p[1]/t*Math.PI*2;const l=a1-a0>Math.PI?1:0;const d=`M${c+R*Math.cos(a0)} ${c+R*Math.sin(a0)} A${R} ${R} 0 ${l} 1 ${c+R*Math.cos(a1-.03)} ${c+R*Math.sin(a1-.03)}`;a0=a1;return `<path d="${d}" fill="none" stroke="${p[2]}" stroke-width="15" stroke-linecap="round"/>`}).join('')}</svg>`}
+const logo=s=>`<div class="logo" style="background:${s.c}">${s.s.slice(0,2)}</div>`;
+const row=s=>`<button class="stock" onclick="go('stock/${s.s}')" aria-label="${s.n}">${logo(s)}<div class="n"><b>${s.n}</b><small>${s.s} · ${s.sector}</small></div><div class="p"><b>${money(s.p)}</b><span class="badge ${cls(s.ch)}">${pc(s.ch)}</span></div></button>`;
+const miniCard=s=>`<button class="card" style="min-width:150px;text-align:left" onclick="go('stock/${s.s}')">${logo(s)}<b style="display:block;margin-top:10px">${s.s}</b><small class="muted">${s.n}</small><div style="margin:6px 0">${money(s.p)}</div><span class="badge ${cls(s.ch)}">${pc(s.ch)}</span></button>`;
+function go(r){location.hash='#/'+r}
+addEventListener('hashchange',()=>{S.r=location.hash.slice(2)||'splash';S.sheet=null;render()});
+function toast(m){S.toast=m;render();setTimeout(()=>{S.toast='';render()},1800)}
+function tab(r){return `<div class="nav">${[['home','🏠','Home'],['watchlist','⭐','Watchlist'],['portfolio','💼','Portfolio'],['news','📰','News'],['profile','👤','Profile']].map(n=>`<button class="${r===n[0]?'on':''}" onclick="go('${n[0]}')" aria-label="${n[2]}"><span class="i">${n[1]}</span>${n[2]}</button>`).join('')}</div>`}
+const bar=t=>`<div class="status"><span>9:41</span><span>●●● 5G ▮</span></div>`;
+const head=(t,back)=>`<div class="head"><div class="row">${back?`<button class="back" onclick="history.back()" aria-label="Back">←</button>`:''}<h1>${t}</h1></div></div>`;
+/* ---------- screens ---------- */
+function splash(){return `<div class="phone splash" style="border-radius:inherit;height:100%"><div><div class="logo" style="background:#12B886;width:56px;height:56px;font-size:24px">L</div><h1>Invest with clarity.</h1><p style="opacity:.85;line-height:1.5">Track markets, build your watchlist and understand your portfolio, simply.</p></div><div style="display:grid;gap:10px"><div class="card" style="background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);color:#fff"><div class="row spread"><div><small style="opacity:.8">Market today</small><b style="display:block;font-size:22px">+1.24%</b></div><svg width="150" height="46" viewBox="0 0 150 46"><path d="M0 38 C20 36 25 20 45 24 S75 40 95 18 S130 6 150 4" fill="none" stroke="#5EF2C4" stroke-width="3" stroke-linecap="round"/></svg></div></div><button class="btn p" onclick="go('signup')">Get started</button><button class="btn" style="background:rgba(255,255,255,.14);color:#fff" onclick="go('login')">I already have an account</button></div></div>`}
+function auth(sign){return `${bar()}<div class="scroll"><div style="height:30px"></div><div class="logo" style="background:var(--brand);width:52px;height:52px">L</div><h1 style="font-size:28px;margin:16px 0 4px">${sign?'Create account':'Welcome back'}</h1><p class="muted">${sign?'Start investing in a few minutes.':'Log in to see your portfolio.'}</p>${sign?`<label class="l" for="nm">Full name</label><input id="nm" class="f" value="Ajvi Dylgjeri">`:''}<label class="l" for="em">Email or mobile number</label><input id="em" class="f" value="ajvi@example.com"><label class="l" for="pw">Password</label><input id="pw" class="f" type="password" value="password123">${sign?'':`<div style="text-align:right;margin-top:10px"><a class="muted" style="font-size:13px;cursor:pointer" onclick="toast('Reset link sent (demo)')">Forgot password?</a></div>`}<div style="margin-top:20px"><button class="btn p" onclick="go('home')">${sign?'Continue':'Log in'}</button></div><div class="row" style="margin:18px 0"><hr style="flex:1;border:0;border-top:1px solid var(--line)"><small class="muted">or continue with</small><hr style="flex:1;border:0;border-top:1px solid var(--line)"></div><div class="grid2"><button class="btn s" onclick="go('home')">Google</button><button class="btn s" onclick="go('home')">Apple</button></div><p class="muted" style="text-align:center;margin-top:20px;font-size:13px">${sign?'Have an account? <a style="color:var(--brand);font-weight:700;cursor:pointer" onclick="go(\'login\')">Log in</a>':'New here? <a style="color:var(--brand);font-weight:700;cursor:pointer" onclick="go(\'signup\')">Sign up</a>'}</p></div>`}
+function home(){const g=[...STOCKS].sort((a,b)=>b.ch-a.ch);return `${bar()}<div class="head"><div><small class="muted">Good morning</small><h1>Ajvi 👋</h1></div><div class="logo" style="background:var(--brand);border-radius:50%">AD</div></div><div class="scroll"><div class="search"><span>🔍</span><input placeholder="Search stocks, e.g. NOVA" aria-label="Search" onkeydown="if(event.key==='Enter'){S.wq=this.value;go('watchlist')}"></div>
+<div class="card" style="margin-top:14px"><div class="row spread"><b>Market overview</b><span class="muted" style="font-size:12px">Open · 9:41</span></div><div class="grid2" style="margin-top:10px">${[['Lumen 50','4,812.6',.62],['Tech Index','12,390.1',1.41],['Energy Index','2,044.3',-0.33],['Volatility','14.8',-2.1]].map(i=>`<div><small class="muted">${i[0]}</small><b style="display:block">${i[1]}</b><span class="badge ${cls(i[2])}">${pc(i[2])}</span></div>`).join('')}</div></div>
+<h2 class="sec">Trending <a onclick="go('watchlist')">See all</a></h2><div class="chips" style="gap:10px">${STOCKS.slice(0,5).map(miniCard).join('')}</div>
+<h2 class="sec">Top gainers</h2><div class="card">${g.slice(0,3).map(row).join('')}</div>
+<h2 class="sec">Top losers</h2><div class="card">${g.slice(-3).reverse().map(row).join('')}</div>
+<h2 class="sec">Watchlist <a onclick="go('watchlist')">Edit</a></h2><div class="card">${S.watch.slice(0,3).map(s=>row($(s))).join('')}</div>
+<h2 class="sec">News highlights <a onclick="go('news')">More</a></h2><div class="card">${NEWS.slice(0,2).map(newsItem).join('')}</div></div>${tab('home')}`}
+function newsItem(n){return `<div class="news"><div class="thumb" style="background:var(--chip)">${n[3]}</div><div><small class="up" style="font-weight:700">${n[0]}</small><b style="display:block;line-height:1.3;margin:2px 0">${n[1]}</b><small class="muted">${n[2]}</small></div></div>`}
+function stock(sym){const s=$(sym)||STOCKS[0];const vals=series(s.s,S.range);const delta=vals.at(-1)-vals[0];const inW=S.watch.includes(s.s);
+return `${bar()}<div class="head"><div class="row"><button class="back" onclick="history.back()" aria-label="Back">←</button><div><b>${s.s}</b><small class="muted" style="display:block">${s.n}</small></div></div><button class="back" onclick="toggleWatch('${s.s}')" aria-label="${inW?'Remove from watchlist':'Add to watchlist'}">${inW?'★':'☆'}</button></div><div class="scroll"><div style="margin:6px 0 10px"><div style="font-size:34px;font-weight:700;letter-spacing:-1px">${money(s.p)}</div><span class="${cls(delta)}" style="font-weight:700">${delta>=0?'▲':'▼'} ${money(Math.abs(delta))} (${pc(delta/vals[0]*100)}) · ${S.range}</span></div>${chart(vals)}
+<div class="chips" style="justify-content:space-between;margin:10px 0">${['1D','1W','1M','1Y'].map(r=>`<button class="chip ${S.range===r?'on':''}" style="flex:1" onclick="S.range='${r}';render()">${({'1D':'Daily','1W':'Weekly','1M':'Monthly','1Y':'Yearly'})[r]}</button>`).join('')}</div>
+<div class="card"><h2 class="sec" style="margin-top:0">Key statistics</h2><div class="grid2"><div class="stat"><small>Market cap</small><b>$${s.cap}</b></div><div class="stat"><small>Volume</small><b>${s.vol}</b></div><div class="stat"><small>Day high</small><b>${money(s.p*1.021)}</b></div><div class="stat"><small>Day low</small><b>${money(s.p*.982)}</b></div><div class="stat"><small>52-week high</small><b>${money(s.p*1.28)}</b></div><div class="stat"><small>52-week low</small><b>${money(s.p*.71)}</b></div></div></div>
+<div class="card" style="margin-top:12px"><b>About ${s.n}</b><p class="muted" style="margin-top:6px;line-height:1.5">${s.about} Sector: ${s.sector}.</p></div><div class="grid2" style="margin-top:16px;position:sticky;bottom:0"><button class="btn p" onclick="S.sheet='buy';render()">Buy</button><button class="btn sell" onclick="S.sheet='sell';render()">Sell</button></div></div>
+${S.sheet?`<div class="scrim" onclick="S.sheet=null;render()"></div><div class="sheet" role="dialog" aria-label="${S.sheet} ${s.s}"><div class="row spread"><b style="font-size:18px;text-transform:capitalize">${S.sheet} ${s.s}</b><button class="back" onclick="S.sheet=null;render()" aria-label="Close">✕</button></div><div class="row spread" style="margin:18px 0"><span class="muted">Quantity</span><div class="row"><button class="back" onclick="S.qty=Math.max(1,S.qty-1);render()" aria-label="Less">−</button><b style="min-width:30px;text-align:center;font-size:20px">${S.qty}</b><button class="back" onclick="S.qty++;render()" aria-label="More">+</button></div></div><div class="row spread"><span class="muted">Estimated total</span><b>${money(s.p*S.qty)}</b></div><p class="muted" style="font-size:12px;margin:10px 0 16px">UI concept only. No real order is placed and prices are fictional.</p><button class="btn ${S.sheet==='buy'?'p':'sell'}" onclick="S.sheet=null;toast('${S.sheet==='buy'?'Buy':'Sell'} order for ${S.qty} × ${s.s} (demo)');">Confirm ${S.sheet}</button></div>`:''}`}
+function toggleWatch(s){const i=S.watch.indexOf(s);if(i>=0){S.watch.splice(i,1);toast('Removed from watchlist')}else{S.watch.push(s);toast('Added to watchlist')}}
+function portfolio(){const val=HOLD.reduce((a,h)=>a+h[1]*$(h[0]).p,0),cost=HOLD.reduce((a,h)=>a+h[1]*h[2],0),pl=val-cost;const cols=['#12B886','#4F46E5','#0EA5E9','#F59E0B','#EC4899'];
+const pv=[]; seed=99; let v=cost*.9; for(let i=0;i<60;i++){v+= (val-v)/(60-i)*1.1+(rnd()-.45)*val*.01;pv.push(v)} pv[59]=val;
+return `${bar()}${head('Portfolio')}<div class="scroll"><div class="card" style="background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;border:0"><small style="opacity:.85">Total portfolio value</small><div style="font-size:34px;font-weight:700;letter-spacing:-1px">${money(val)}</div><div style="font-weight:700">${pl>=0?'▲':'▼'} ${money(Math.abs(pl))} (${pc(pl/cost*100)}) all time</div></div>
+<div class="grid2" style="margin-top:12px"><div class="card"><small class="muted">Invested</small><b style="display:block;font-size:18px">${money(cost)}</b></div><div class="card"><small class="muted">Profit & loss</small><b class="${cls(pl)}" style="display:block;font-size:18px">${money(pl)}</b></div></div>
+<h2 class="sec">Performance</h2><div class="card">${chart(pv)}</div>
+<h2 class="sec">Asset allocation</h2><div class="card row" style="gap:16px">${donut(HOLD.map((h,i)=>[h[0],h[1]*$(h[0]).p,cols[i]]))}<div style="display:grid;gap:6px;font-size:13px">${HOLD.map((h,i)=>`<div><span style="color:${cols[i]}">●</span> ${h[0]} <b>${Math.round(h[1]*$(h[0]).p/val*100)}%</b></div>`).join('')}</div></div>
+<h2 class="sec">Holdings</h2><div class="card">${HOLD.map(h=>{const s=$(h[0]);const p=(s.p-h[2])*h[1];return `<button class="stock" onclick="go('stock/${s.s}')">${logo(s)}<div class="n"><b>${s.s}</b><small>${h[1]} shares · avg ${money(h[2])}</small></div><div class="p"><b>${money(s.p*h[1])}</b><span class="badge ${cls(p)}">${p>=0?'+':'−'}${money(Math.abs(p))}</span></div></button>`}).join('')}</div>
+<h2 class="sec">Transaction history</h2><div class="card">${TX.map(t=>`<div class="set"><div><b>${t[0]} ${t[1]}</b><small class="muted" style="display:block">${t[3]}</small></div><b class="${t[0]==='Buy'?'up':'down'}">${t[0]==='Buy'?'+':'−'}${t[2]} sh</b></div>`).join('')}</div></div>${tab('portfolio')}`}
+function newsView(){const cats=['All','Markets','Company','Economy','Trending'];const list=NEWS.filter(n=>S.cat==='All'||n[0]===S.cat);return `${bar()}${head('Market news')}<div class="scroll"><div class="chips">${cats.map(c=>`<button class="chip ${S.cat===c?'on':''}" onclick="S.cat='${c}';render()">${c}</button>`).join('')}</div><div class="card" style="margin-top:14px;background:linear-gradient(135deg,#06261F,#0B7A5A);color:#fff;border:0"><small style="opacity:.8">Featured · Markets</small><b style="display:block;font-size:19px;line-height:1.3;margin:6px 0">Energy leads the rally: what drove this week's biggest moves</b><small style="opacity:.8">6 min read · Today</small></div><h2 class="sec">Latest</h2><div class="card">${list.map(newsItem).join('')||'<p class="muted">No articles in this category.</p>'}</div></div>${tab('news')}`}
+function watchlist(){const q=S.wq.toLowerCase();const mine=S.watch.map($).filter(s=>(s.n+s.s).toLowerCase().includes(q));const others=STOCKS.filter(s=>!S.watch.includes(s.s)&&(s.n+s.s).toLowerCase().includes(q));return `${bar()}${head('Watchlist')}<div class="scroll"><div class="search"><span>🔍</span><input id="wq" placeholder="Search stocks" value="${S.wq}" oninput="S.wq=this.value;render(true)" aria-label="Search stocks"></div><h2 class="sec">My list <small class="muted">${mine.length} stocks</small></h2><div class="card">${mine.map(s=>`<div class="row" style="border-bottom:1px solid var(--line)"><div style="flex:1">${row(s).replace('class="stock"','class="stock" style="border:0"')}</div><button class="back" onclick="toggleWatch('${s.s}')" aria-label="Remove ${s.n}">✕</button></div>`).join('')||'<p class="muted" style="padding:10px">Nothing here yet. Add stocks below.</p>'}</div>${others.length?`<h2 class="sec">Add stocks</h2><div class="card">${others.map(s=>`<div class="row"><div style="flex:1">${row(s).replace('class="stock"','class="stock" style="border:0"')}</div><button class="back" onclick="toggleWatch('${s.s}')" aria-label="Add ${s.n}">＋</button></div>`).join('')}</div>`:''}</div>${tab('watchlist')}`}
+function profile(){const sw=(k,l)=>`<div class="set"><span>${l}</span><button class="switch ${S[k]?'on':''}" onclick="S['${k}']=!S['${k}'];render()" aria-label="${l}"></button></div>`;return `${bar()}${head('Profile')}<div class="scroll"><div class="card row"><div class="logo" style="background:var(--brand);border-radius:50%;width:56px;height:56px">AD</div><div><b style="font-size:17px">Ajvi Dylgjeri</b><small class="muted" style="display:block">ajvi@example.com · Verified</small></div></div><h2 class="sec">Appearance</h2><div class="card"><div class="set"><span>Theme</span><div class="chips"><button class="chip ${S.theme==='light'?'on':''}" onclick="setTheme('light')">☀ Light</button><button class="chip ${S.theme==='dark'?'on':''}" onclick="setTheme('dark')">🌙 Dark</button></div></div><div class="set"><span>Language</span><b>English ▾</b></div></div><h2 class="sec">Notifications</h2><div class="card">${sw('push','Push notifications')}${sw('price','Price alerts')}${sw('news','Daily news digest')}</div><h2 class="sec">Support</h2><div class="card"><div class="set"><span>Help & Support</span><span>›</span></div><div class="set"><span>Privacy policy</span><span>›</span></div><div class="set" onclick="go('design')" style="cursor:pointer"><span>Design system</span><span>›</span></div></div><div style="margin-top:18px"><button class="btn s down" onclick="go('login')">Log out</button></div></div>${tab('profile')}`}
+function design(){const sw=(n,v,t='#fff')=>`<div class="ds-sw" style="background:${v};color:${t}">${n}<br>${v}</div>`;return `${bar()}${head('Design system',true)}<div class="scroll"><h2 class="sec" style="margin-top:6px">Colour</h2><div class="grid2">${sw('Brand','#0B7A5A')}${sw('Brand light','#12B886')}${sw('Gain','#0B7A5A')}${sw('Loss','#C62F3E')}${sw('Ink','#0E1A2B')}${sw('Surface','#F7F9FC','#0E1A2B')}</div><p class="muted" style="margin:8px 0;font-size:12px">Gain/loss pairs always include ▲▼ or +/− so colour is never the only signal. Brand on white = 5.6:1.</p><h2 class="sec">Typography</h2><div class="card"><div style="font-size:34px;font-weight:700">$184.32</div><div style="font-size:22px;font-weight:700">Heading 22</div><div style="font-size:15px">Body 15 regular</div><div class="muted" style="font-size:12px">Caption 12 · muted</div></div><h2 class="sec">Buttons & chips</h2><div class="card" style="display:grid;gap:10px"><button class="btn p">Primary</button><button class="btn s">Secondary</button><button class="btn sell">Sell / destructive</button><div class="chips"><button class="chip on">Selected</button><button class="chip">Default</button><span class="badge up">+2.14%</span><span class="badge down">−1.32%</span></div></div><h2 class="sec">Spacing</h2><div class="card muted">4 · 8 · 12 · 16 · 24 pt scale · card radius 18 · button radius 14 · screen padding 18</div></div>${tab('profile')}`}
+function setTheme(t){S.theme=t;document.documentElement.dataset.theme=t;render()}
+function render(keep){const r=S.r;const p=document.getElementById('phone');const base=r.split('/')[0];let h;
+if(r==='splash'){p.innerHTML=splash()+(S.toast?`<div class="toast">${S.toast}</div>`:'');return}
+if(r==='login')h=auth(false);else if(r==='signup')h=auth(true);else if(base==='home')h=home();else if(base==='stock')h=stock(r.split('/')[1]);else if(base==='portfolio')h=portfolio();else if(base==='news')h=newsView();else if(base==='watchlist')h=watchlist();else if(base==='profile')h=profile();else if(base==='design')h=design();else h=home();
+const sc=p.querySelector('.scroll');const top=sc?sc.scrollTop:0;
+p.innerHTML=h+(S.toast?`<div class="toast" role="status">${S.toast}</div>`:'');
+const n=p.querySelector('.scroll');if(n&&keep!==undefined)n.scrollTop=top;
+if(keep){const i=document.getElementById('wq');if(i){i.focus();i.setSelectionRange(i.value.length,i.value.length)}}}
+render();
+</script>
+</body>
+</html>
